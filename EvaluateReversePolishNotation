@@ -1,0 +1,89 @@
+// Problem: we are asked to add, subtract, multiply or divide numbers. The input provided includes the numbers followed by the operators in a string array (in reverse polish notation). 
+
+// UMPIRE
+// understand - a program that + - * / 
+            // division between two integers truncate towards 0: chop off decimal portion
+            // so 8.19191 becomes 8, 9.999 becomes 9
+            // just call the FLOOR and CEILING methods (for positive & - #s respectively)
+
+            // edge case - there will be no /0, input always valid
+
+            // reverse polish notation
+            // 3 10 5 + * means 10 + 5, then 3 * 15
+// match 
+            // brute force - two pointers approach? as soon as hit a symbol go back or slow pointer do
+            // if we're editing the LAST TWO NUMBERS BEFORE A SYMBOL we should just use STACK bc we can easily pop those
+                // O(1)
+
+// plan 
+            //1. declare stack 1 (helper stack), and int newVal (for operations done) - i think
+
+            // 2. we receive strings, 
+            //       a.  if "+" "-" or "/": pop off first two numbers on top of stack and perform operation
+            //                            then re-insert in stack
+            //        b.  else, if numbers: add number to stack 1
+
+// implement 
+
+import java.lang.Math;
+
+class Solution {
+    public int evalRPN(String[] tokens) {
+        
+        // 1. declare helper stack 
+        Stack<Integer> helperStack = new Stack<Integer>();
+        int initialLength = tokens.length;
+        
+        // 2. is input character or int? LOOP THROUGH STRING ARRAY FIRST
+        
+        for (int i=0; i< initialLength; i++) {
+        // a. input is characters
+        if (tokens[i].equals("+") || tokens[i].equals("/") || tokens[i].equals("-") || tokens[i].equals("*")  ) {
+       
+        // values we're going to do the operations on
+        int y = helperStack.pop();
+        int x = helperStack.pop();
+        int newVal = 0;
+            
+        switch(tokens[i]) {
+            case "+":
+	            newVal = x+y;
+                break;
+	        case "-":
+                newVal = x-y;	 
+                break;
+            case "/":
+                newVal = x/y;
+                
+                if (newVal != (int)newVal ){  // is new value an integer or a decimal? 
+                    if (newVal >0){  // if decimal is positive, call floor
+                        newVal = (int)Math.floor(newVal);
+                    }
+                    else{  // if decimal is negative, call ceiling
+                        newVal = (int)Math.ceil(newVal);
+                    }
+                }
+                break;
+            case "*":
+                newVal = x*y;
+                break;
+            default:
+	            System.out.println("Error");
+             }
+        
+        // add new value to top of stack
+        helperStack.push(newVal);
+        
+        } // closes IF
+        
+        // b. input is NUMBERS
+        else {
+            helperStack.push(Integer.parseInt(tokens[i]));
+            }
+        }   // end of for loop (we've looped through all characters of string array input)
+        
+        return helperStack.pop();
+    }    
+}
+
+// RE - review & evaluate
