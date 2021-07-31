@@ -1,0 +1,98 @@
+/*
+Problem #1
+Given an array, find the length of the smallest subarray in it which when sorted will sort the whole array.
+
+Example 1:
+
+Input: [1, 2, 5, 3, 7, 10, 9, 12]
+Output: 5
+Explanation: We need to sort only the subarray [5, 3, 7, 10, 9] to make the whole array sorted
+
+Example 2:
+
+Input: [1, 3, 2, 0, -1, 7, 10]
+Output: 5
+Explanation: We need to sort only the subarray [1, 3, 2, 0, -1] to make the whole array sorted
+
+Example 3:
+
+Input: [1, 2, 3]
+Output: 0
+Explanation: The array is already sorted
+
+-
+UMPIRE
+
+U - if empty, return 0, fastest time, no space, no duplicates
+M - two pointer approach
+P - 
+1. pointer 1: loop from the start, comparing if current is less than next. if NOT, set pointer 1 to that index (and stop p1 loop)
+    while (p1 < p1.next && p1 != p2) 
+
+2. pointer 2: loop from the end, comparing if current is more than next. if NOT, set pointer 2 to that index. stop then
+  while (p2 > p2.prev && p1 != p2)    // prev is next
+
+//if pointer 1 == pointer 2 index, BREAK out cause ans = 0
+4. return pointer2- pointer 1 = answer
+
+
+*/
+
+/*
+0.  1. 2  3.  4. 5.  6 
+[1, 3, 2, 0, -1, 7, 10]
+      p1      p2
+*/
+
+class Main {
+
+  public static int smallestSubString (int[] arr){
+    // 1. pointer 1 
+    int p1, p2;
+    int size = arr.length;
+
+    if (size == 0) { return 0;}
+    p1 = 0; 
+    p2 = size-1;
+
+    /*/ while pointer 1 < pointer 1. next, OR pointer 1 != pointer 2
+    while (arr[p1] < arr[p1+1] || p1 != p2){
+      p1++;
+      if ( arr[p2] > arr[p2-1] ){
+        p2--;
+      }
+    }*/
+
+    for (int i = 0; i < size; i++){
+
+      if (arr[p1] < arr[p1+1] && p1!=p2){
+        p1++;
+      }
+      if (arr[p2] > arr[p2-1] && p1!=p2){
+        p2--;
+      }
+    }
+
+    if ((p2-p1) == 0){ // edge case :)
+      return 0;
+    }
+    
+    return (p2-p1)+1;
+
+  }
+
+  public static void main(String[] args) {
+    System.out.println("Hello world!");
+
+    int[] arr1 = new int[]{1, 2, 5, 3, 7, 10, 9, 12};
+    int[] arr2 = new int[]{1, 3, 2, 0, -1, 7, 10} ; 
+    int[] arr3 = new int[]{1, 2, 3}; 
+
+    int value1 = smallestSubString(arr1);
+    int value2 = smallestSubString(arr2);
+    int value3 = smallestSubString(arr3);
+    
+    System.out.println("value1 = " + value1 + " \n value2 = "+ value2 + " \n value3 = " + value3);
+
+  }
+}
